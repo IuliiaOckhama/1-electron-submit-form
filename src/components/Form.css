@@ -1,0 +1,17 @@
+.submit-form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.submit-form__label {
+  width: 30vw;
+  margin-bottom: 10px;
+}
+.submit-form__text-input {
+  width: 30vw;
+  margin-bottom: 10px;
+}
+.submit-form__submit-input {
+  width: 30vw;
+}
