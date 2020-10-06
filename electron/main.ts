@@ -1,41 +1,31 @@
-//import { AppManager } from './AppManager'
-// import { MainWindow } from './MainWindow'
+import { app, ipcMain } from 'electron'
 import { MainWindow } from './MainWindow'
 import { NativeMenu } from './Menu'
-import { app, BrowserWindow, dialog, ipcMain, Menu } from 'electron'
 import AppManager from './AppManager'
+import { SubmitUsernameChannel } from './SubmitUsernameChannel'
+import { IpcChannelInterface } from '../shared/entities'
 
-//  // Dialog
+class Main {
+  private onWindowAllClosed() {
+    if (process.platform !== 'darwin') {
+      app.quit();
+    }
+  }
+  private setupApplication() {
+    const window = new MainWindow()
+    AppManager.setWindow('MainWindow', window)
+    AppManager.setMenu(new NativeMenu(window.mainWindow))
+  }
+  private registerIpcChannels(ipcChannels: IpcChannelInterface[]) {
+    ipcChannels.forEach(channel => ipcMain.on(channel.getName(), (event, request) => channel.handle(event, request)));
+  }
+  public init(ipcChannels: IpcChannelInterface[]) {
+    app.on('ready', this.setupApplication);
+    app.disableHardwareAcceleration()
+    app.on('window-all-closed', this.onWindowAllClosed)
 
-//  ipcMain.on('SUBMIT_FORM', (event, data) => {
-//   const isUsernameExists = data.length > 0
-//   const message = isUsernameExists
-//    ? `Your username is ${data}`
-//    : 'Enter your username'
+    this.registerIpcChannels(ipcChannels);
+  }
+}
 
-//   const options = {
-//    type: isUsernameExists ? 'info' : 'warning',
-//    buttons: ['Okay'],
-//    defaultId: 1,
-//    title: 'Your username',
-//    message: message,
-//    checkboxLabel: 'Remember my answer',
-//    checkboxChecked: true,
-//   }
-//   dialog.showMessageBox(null, options, (response, checkboxChecked) => {
-//    console.log(response)
-//   })
-//  })
-
-//  mainWindow.on('closed', () => {
-//   mainWindow = null
-//  })
-// }
-app.on('ready', () => {
- AppManager.setWindow('MainWindow', new MainWindow())
- AppManager.setMenu(new NativeMenu())
-})
-
-app.on('window-all-closed', function () {
- app.quit()
-})
+(new Main()).init([new SubmitUsernameChannel()]);

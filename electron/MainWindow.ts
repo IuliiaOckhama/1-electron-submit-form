@@ -15,8 +15,7 @@ export class MainWindow {
       height: 600,
       show: false,
       webPreferences: {
-       nodeIntegration: true,
-       preload: __dirname + '/preload.js',
+       nodeIntegration: true
       },
     })
 

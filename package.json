@@ -29,7 +29,7 @@
     "postcss": "^8.0.0"
   },
   "scripts": {
-    "start-react": "react-scripts start",
+    "start-react": "BROWSER=none react-scripts start",
     "build:css": "postcss src/styles/main.css -o src/index.css",
     "watch:css": "postcss src/styles/main.css -o src/index.css -w",
     "build:electron": "webpack --config ./webpack.config.js",

@@ -1,9 +1,13 @@
-import { dialog, Menu } from 'electron'
+import { dialog, BrowserWindow, Menu } from 'electron'
 
 export class NativeMenu {
- constructor() {
-  Menu.setApplicationMenu(this.createMenu())
- }
+
+  public readonly mainWindow: BrowserWindow;
+
+  constructor(mainWindow: BrowserWindow) {
+    Menu.setApplicationMenu(this.createMenu())
+    this.mainWindow = mainWindow
+  }
 
  showMessage(message: string) {
   dialog.showMessageBox({

@@ -2,16 +2,17 @@ import * as React from 'react'
 import Form from '../components/Form'
 import './MainPage.css'
 import { FormValue } from '../entities'
+import {IpcService} from "../services";
 
-const ipcRenderer = window.require('electron').ipcRenderer
 
 export default function MainPage() {
  const [value, setValue] = React.useState<string>('')
+ const ipc = new IpcService()
  const handleValueChange = (value: FormValue) => {
   setValue(value)
  }
  const handleFormSubmit = () => {
-  ipcRenderer.send('SUBMIT_FORM', value)
+  ipc.send('submit-username', value)
  }
  return (
   <div className="form-container">

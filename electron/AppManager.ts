@@ -1,10 +1,10 @@
-import { NativeMenu } from "Menu";
+import { MainWindow } from "MainWindow";
+import { NativeMenu } from 'Menu'
 
-type ManagerTypes = any;
-
+type ManagerTypes = MainWindow;
 class AppManager {
   private menu!: NativeMenu;
-  private windowManager: Map<string, any> = new Map();
+  private windowManager: Map<string, MainWindow> = new Map();
 
   setMenu(menu: NativeMenu): void {
     this.menu = menu;
