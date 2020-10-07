@@ -1,5 +1,5 @@
 import * as React from 'react'
-import MainPage from './views/MainPage'
+import MainPage from './views/MainPage/index'
 
 function App() {
  return (
