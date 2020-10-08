@@ -10,8 +10,8 @@ var MainWindow = /** @class */ (function () {
     }
     MainWindow.prototype.createWindow = function () {
         var mainWindow = new electron_1.BrowserWindow({
-            width: 800,
-            height: 600,
+            width: 1400,
+            height: 1000,
             show: false,
             webPreferences: {
                 nodeIntegration: true

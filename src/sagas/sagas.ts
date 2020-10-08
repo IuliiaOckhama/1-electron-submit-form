@@ -1,48 +1,37 @@
 /* eslint-disable import/first */
-import { takeLatest, put, select } from 'redux-saga/effects'
-
-/******************************************************************************/
-/******************************* SELECTORS ************************************/
-/******************************************************************************/
-
-import { State } from '../reducers'
-
-const getData = (state: State) => state.data.data
+import { takeLatest, put, call } from 'redux-saga/effects'
 
 /******************************************************************************/
 /******************************* TYPES ****************************************/
 /******************************************************************************/
 
-import {
-  SET_DATA
-} from '../actions/types'
+import { FETCH_NOTES } from '../actions/types'
 
 /******************************************************************************/
 /******************************* ACTIONS **************************************/
 /******************************************************************************/
 
-import {
-  setData
-} from '../actions/dataActions'
+import { setNotes } from '../actions/dataActions'
 
 /******************************************************************************/
 /******************************* HELPERS **************************************/
 /******************************************************************************/
+
+import { fetchNotesApi } from './api'
 
 /******************************************************************************/
 /******************************* SAGAS *************************************/
 /******************************************************************************/
 
 function* handleSetDataSaga() {
-  try {
-    const data = yield select(getData)
-    console.log(data, 'ping')
-    yield put(setData('some data'))
-  } catch (error) {
-    console.log('error', error)
-  }
+ try {
+  const notes = yield call(fetchNotesApi)
+  yield put(setNotes(notes.data))
+ } catch (error) {
+  console.log('error', error)
+ }
 }
 
 export function* setDataSaga() {
-  yield takeLatest(SET_DATA, handleSetDataSaga)
+ yield takeLatest(FETCH_NOTES, handleSetDataSaga)
 }

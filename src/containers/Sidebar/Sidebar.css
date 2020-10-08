@@ -1,0 +1,36 @@
+.sidebar {
+  border: 3px solid blue;
+  width: 30%;
+}
+.sidebar__title {
+  margin-block-start: 0;
+  margin-block-end: 0;
+  padding: 10px;
+  box-sizing: border-box;
+  height: 10%;
+  border-bottom: 2px solid grey;
+}
+.sidebar__title h3 {
+  margin-block-start: 0;
+  margin-block-end: 0;
+}
+.sidebar__notes-list {
+  overflow-y: auto;
+  height: 90%;
+}
+.sidebar__note {
+  text-align: start;
+  padding: 10px;
+  border-width: 2px 0px;
+  border-style: solid;
+}
+.sidebar__note:hover {
+  background: lightgrey;
+  cursor: pointer;
+}
+.sidebar__note-content {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  padding: 5px 0;
+}

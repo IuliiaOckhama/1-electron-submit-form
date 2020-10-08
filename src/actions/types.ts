@@ -1,1 +1,3 @@
-export const SET_DATA = 'SET_DATA'
+export const FETCH_NOTES = 'FETCH_NOTES'
+export const SET_NOTES = 'SET_NOTES'
+export const SET_SELECTED_NOTE = 'SET_SELECTED_NOTE'

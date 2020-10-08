@@ -1,0 +1,55 @@
+
+
+h1 {
+  margin-block-start: 0.37em;
+  margin-block-end: 0.37em;
+}
+
+.editor {
+  border: 3px solid blue;
+  width: 65%;
+  display: flex;
+  flex-direction: column;
+}
+.button {
+  cursor: pointer;
+  border: 2px solid black;
+  cursor: pointer;
+  padding: 2px 4px;
+  margin-right: 5px;
+}
+.button:hover {
+  background: lightgrey;
+}
+.button_active {
+  border: 2px solid red;
+}
+.icon {
+  font-size: 18px;
+}
+.toolbar {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  border-bottom: 2px solid grey;
+  box-sizing: border-box;
+  min-height: 10%;
+}
+.editable-note {
+  overflow-y: auto;
+  text-align: start;
+  padding: 0px 10px 10px 10px;
+  min-height: 70%;
+}
+.title-input {
+  font: inherit;
+  font-size: 2.5em;
+  font-weight: bold;
+  border-color: transparent;
+  padding: 10px;
+  border-width: 0;
+}
+.title-input:focus {
+  outline: 0;
+  border-color: transparent;
+}
