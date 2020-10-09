@@ -1,4 +1,5 @@
 import * as React from 'react'
+import { IpcRenderer } from 'electron'
 import SidebarNote from '../../components/SidebarNote'
 import { DataStoreStructure, Note } from '../../entities'
 import './Sidebar.css'

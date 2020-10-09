@@ -29,4 +29,10 @@ export class MainWindow {
     
     return mainWindow;
   }
+
+  public send(channel: string, args: any) {
+    if (this.mainWindow) {
+      this.mainWindow.webContents.send(channel, args);
+    } 
+  }
 }

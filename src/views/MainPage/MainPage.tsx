@@ -1,4 +1,5 @@
 import * as React from 'react'
+import { IpcRenderer } from 'electron'
 import './MainPage.css'
 
 import Sidebar from '../../containers/Sidebar'
@@ -12,6 +13,7 @@ interface DispatchProps {
 interface StateProps {
  data: DataStoreStructure;
 }
+
 export default function MainPage(
  props: StateProps & DispatchProps
 ): React.ReactElement {

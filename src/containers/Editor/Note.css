@@ -5,11 +5,51 @@ h1 {
   margin-block-end: 0.37em;
 }
 
-.editor {
-  border: 3px solid blue;
+.editor-container {
   width: 65%;
   display: flex;
   flex-direction: column;
+}
+.editor {
+  border: 3px solid blue;
+  height: 90%;
+  display: flex;
+  flex-direction: column;
+}
+.editor-container__navbar {
+  height: 10%;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+.editor-container__button {
+  color: unset;
+  text-align: center;
+  align-items: flex-start;
+  cursor: default;
+  background-color: unset;
+  box-sizing: border-box;
+  margin: 0em;
+  font: unset;
+  padding: 1px 6px;
+  flex-basis: 20%;
+  height: 60%;
+}
+.editor-container__button_active {
+  border: 3px solid blue;
+  cursor: pointer;
+}
+.editor-container__button_disabled {
+  border: 3px solid grey;
+  cursor: inherit
+}
+.editor-container__button_disabled:hover {
+  background-color: white;
+  color: unset;
+}
+.editor-container__button_active:hover {
+  background-color: blue;
+  color: white;
 }
 .button {
   cursor: pointer;
