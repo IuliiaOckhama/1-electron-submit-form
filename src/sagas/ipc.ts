@@ -1,8 +1,7 @@
-import { IpcService } from '../services'
+import { ipc } from '../index'
 
-const ipc = new IpcService().init()
-const sendIpcReq = (channel: string, args?: any) => {
+export const sendIpcReq = (channel: string, args?: any) => {
  if (ipc) {
-  ipc.send('SAVE_NOTE', 'arg')
+  ipc.send('CONFIRM_SAVE_NOTE', 'arg')
  }
 }

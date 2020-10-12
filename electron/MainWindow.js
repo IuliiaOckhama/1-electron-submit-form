@@ -27,6 +27,11 @@ var MainWindow = /** @class */ (function () {
         mainWindow.once('ready-to-show', function () { return mainWindow.show(); });
         return mainWindow;
     };
+    MainWindow.prototype.send = function (channel, args) {
+        if (this.mainWindow) {
+            this.mainWindow.webContents.send(channel, args);
+        }
+    };
     return MainWindow;
 }());
 exports.MainWindow = MainWindow;

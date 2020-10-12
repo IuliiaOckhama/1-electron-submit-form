@@ -20,7 +20,7 @@ export default function SidebarNote(props: Props) {
    onClick={() => handleSidebarNoteClick(note)}
   >
    <h4>{note.title}</h4>
-   <p className="sidebar__note-content">{note.content}</p>
+   {/* <p className="sidebar__note-content">{note.content}</p> */}
    <p>{createdDate.toLocaleDateString('en-US')}</p>
   </div>
  )

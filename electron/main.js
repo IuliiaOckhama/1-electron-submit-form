@@ -18,18 +18,22 @@ var Main = /** @class */ (function () {
     };
     Main.prototype.setupApplication = function () {
         var window = new MainWindow_1.MainWindow();
-        AppManager_1.default.setWindow('MainWindow', window);
+        AppManager_1.default.setWindow('MainWindow', window.mainWindow);
         AppManager_1.default.setMenu(new Menu_1.NativeMenu(window.mainWindow));
     };
     Main.prototype.registerIpcChannels = function (ipcChannels) {
         ipcChannels.forEach(function (channel) { return electron_1.ipcMain.on(channel.getName(), function (event, request) { return channel.handle(event, request); }); });
     };
-    Main.prototype.init = function (ipcChannels) {
-        electron_1.app.on('ready', this.setupApplication);
+    Main.prototype.init = function () {
+        var _this = this;
+        electron_1.app.on('ready', function () {
+            _this.setupApplication();
+            var ipcChannels = [new SubmitUsernameChannel_1.SubmitUsernameChannel(AppManager_1.default.getWindow('MainWindow'))];
+            _this.registerIpcChannels(ipcChannels);
+        });
         electron_1.app.disableHardwareAcceleration();
         electron_1.app.on('window-all-closed', this.onWindowAllClosed);
-        this.registerIpcChannels(ipcChannels);
     };
     return Main;
 }());
-(new Main()).init([new SubmitUsernameChannel_1.SubmitUsernameChannel()]);
+(new Main()).init();

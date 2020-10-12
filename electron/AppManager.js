@@ -15,6 +15,7 @@ var AppManager = /** @class */ (function () {
     };
     AppManager.prototype.getWindow = function (name) {
         var element = this.windowManager.get(name);
+        console.log(this.windowManager);
         if (element) {
             return element;
         }

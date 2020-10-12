@@ -2,12 +2,14 @@
   border: 3px solid blue;
   width: 30%;
 }
-.sidebar__title {
+.sidebar__header {
+  display: flex;
+  flex-direction: column;
   margin-block-start: 0;
   margin-block-end: 0;
   padding: 10px;
   box-sizing: border-box;
-  height: 10%;
+  height: 20%;
   border-bottom: 2px solid grey;
 }
 .sidebar__title h3 {
@@ -16,7 +18,7 @@
 }
 .sidebar__notes-list {
   overflow-y: auto;
-  height: 90%;
+  height: 80%;
 }
 .sidebar__note {
   text-align: start;
@@ -33,4 +35,77 @@
   white-space: nowrap;
   text-overflow: ellipsis;
   padding: 5px 0;
+}
+.sidebar__buttons-container {
+  display: flex;
+  justify-content: space-between;
+}
+.sidebar__button {
+  color: unset;
+  text-align: center;
+  align-items: flex-start;
+  cursor: default;
+  background-color: white;
+  box-sizing: border-box;
+  margin: 0em;
+  font: unset;
+  padding: 1px 6px;
+  cursor: pointer;
+}
+.sidebar__button_save {
+  color: blue;
+  border: 2px solid blue;
+  font-weight: bold;
+  height: 30px;
+  width: 30px;
+  position: relative;
+}
+.sidebar__button_save:hover {
+  background-color: blue;
+  color: white;
+}
+.sidebar__button_save:after, .sidebar__button_save:before {
+  content: "";
+  display: block;
+  background-color: blue;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.sidebar__button_save:before {
+  height: 1em;
+	width: 0.15em;
+}
+.sidebar__button_save:after {
+  height: 0.15em;
+	width: 1em;
+}
+.sidebar__button_save:hover:before {
+  height: 1em;
+  width: 0.2em;
+  background-color: white;
+}
+.sidebar__button_save:hover:after {
+  height: 0.2em;
+  width: 1em;
+  background-color: white;
+}
+.sidebar__button_delete {
+  border: 2px solid red;
+}
+.sidebar__button_delete:hover {
+  background-color: red;
+  color: white;
+}
+.sidebar__input {
+  font: inherit;
+  font-weight: bold;
+  border-color: transparent;
+  border-width: 0;
+  border-bottom: 2px solid grey;
+  margin: 10px 0px;
+}
+.sidebar__input:focus {
+  border-bottom: 2px solid blue;
 }

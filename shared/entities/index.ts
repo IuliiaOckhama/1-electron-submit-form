@@ -1,8 +1,9 @@
 import { IpcMainEvent, IpcRendererEvent } from 'electron'
 
+export type IpcResponse = any;
 export interface IpcChannelInterface {
  getName(): string;
- handle(event: IpcMainEvent | IpcRendererEvent, request: IpcRequest): void;
+ handle(event: IpcMainEvent | IpcRendererEvent, response: IpcResponse): void;
 }
 
 export interface IpcRequest {

@@ -9,7 +9,7 @@ export class SubmitUsernameChannel implements IpcChannelInterface {
     this.window = window;
   }
   getName(): string {
-    return 'SAVE_NOTE'
+    return 'CONFIRM_SAVE_NOTE'
   }
 
  handle(event: IpcMainEvent, request: IpcRequest): void {

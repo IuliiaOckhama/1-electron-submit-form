@@ -1,8 +1,12 @@
 import { all } from 'redux-saga/effects'
-import {setDataSaga} from './sagas'
+import { setNotesSaga, updateNoteSaga, createNewNoteSaga, confirmNoteSaveSaga, deleteNoteSaga } from './sagas'
 function* rootSaga() {
   yield all([
-    setDataSaga(),
+    setNotesSaga(),
+    updateNoteSaga(),
+    createNewNoteSaga(),
+    deleteNoteSaga(),
+    confirmNoteSaveSaga()
   ])
 }
 

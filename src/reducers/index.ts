@@ -1,17 +1,21 @@
 
 import { combineReducers } from 'redux'
 import dataReducer from './dataReducer'
+import uiReducer from './uiReducer'
 import {
-  DataStoreStructure
+  DataStoreStructure,
+  UiStoreStructure
 } from '../entities'
 
 const rootReducer = () =>
   combineReducers({
-    data: dataReducer
+    data: dataReducer,
+    ui: uiReducer
   })
 
 export interface State {
   data: DataStoreStructure;
+  ui: UiStoreStructure
 }
 
 export default rootReducer

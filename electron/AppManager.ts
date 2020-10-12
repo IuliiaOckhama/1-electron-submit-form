@@ -15,7 +15,6 @@ class AppManager {
 
   setWindow(name: string, element: BrowserWindow): void {
     this.windowManager.set(name, element);
-    console.log('SET', name, element)
   }
 
   getWindow(name: string): BrowserWindow {

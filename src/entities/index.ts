@@ -3,6 +3,10 @@ export interface DataStoreStructure {
  notes: Note[];
  selectedNote: Note | null;
 }
+export interface UiStoreStructure {
+  reqError: string | null,
+  isNoteChanged: boolean
+}
 export type Note = {
  id: number,
  title: string,

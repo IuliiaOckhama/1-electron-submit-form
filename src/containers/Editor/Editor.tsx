@@ -2,66 +2,101 @@ import * as React from 'react'
 import { Editable, withReact, Slate } from 'slate-react'
 import { createEditor, Node } from 'slate'
 import { withHistory } from 'slate-history'
-import { IpcRenderer } from 'electron'
 
 import { MarkButton, BlockButton } from '../../components/EditorButtons'
 import { Element, Leaf } from '../../components/EditorElements'
 import Toolbar from '../../components/Toolbar'
 
 import { INITIAL_VALUE } from '../../constants'
-import { DataStoreStructure } from '../../entities'
+import { DataStoreStructure, UiStoreStructure } from '../../entities'
 import { compareObjects } from '../../helpers'
-import './Note.css'
+import './Editor.css'
 
 interface StateProps {
  data: DataStoreStructure;
+ ui: UiStoreStructure
 }
-const EditorComponent = (props: StateProps) => {
+interface DispatchProps {
+  createNewNote: () => void,
+  setIsNoteChanged: (isChanged: boolean) => void,
+  updateNote: (id: number, title: string, content: Node[]) => void,
+}
+const EditorComponent = (props: StateProps & DispatchProps) => {
  const {
-  data: { selectedNote },
+  data: { selectedNote, notes },
+  ui: { isNoteChanged },
+  createNewNote,
+  setIsNoteChanged,
+  updateNote
  } = props
 
  React.useEffect(() => {
   if (selectedNote) {
-   const newValue = [
-    {
-     type: 'paragraph',
-     children: [{ text: selectedNote.content }],
-    },
-   ]
-   setReferenceValue(newValue)
-   setValue(newValue)
-   setTitle(selectedNote.title)
+    // TODO
+    const newValue = [
+      {
+      type: 'paragraph',
+      children: [{ text: selectedNote.content ? selectedNote.content : '' }],
+      },
+    ]
+    setReferenceValue(newValue)
+    setValue(newValue)
+    setTitle(selectedNote.title)
+    setReferenceTitle(selectedNote.title)
+  } else {
+    const newValue = [
+      {
+      type: 'paragraph',
+      children: [{ text: '' }],
+      },
+    ]
+    setReferenceValue(newValue)
+    setValue(newValue)
+    setTitle('')
+    setReferenceTitle('')
   }
- }, [selectedNote])
+ }, [selectedNote, notes])
+
 
  /* referenceValue - value after compiling backend flat string into Node[]. */
  const [referenceValue, setReferenceValue] = React.useState<Node[]>()
- const [value, setValue] = React.useState<Node[]>(INITIAL_VALUE)
+ const [referenceTitle, setReferenceTitle] = React.useState<string>()
+ // TODO
+ const [value, setValue] = React.useState<any[]>(INITIAL_VALUE)
  const [title, setTitle] = React.useState<string>('')
- const [isNoteChanged, setIsNoteChanged] = React.useState<boolean>(false)
+ // const [isNoteChanged, setIsNoteChanged] = React.useState<boolean>(false)
  const renderElement = React.useCallback((props) => <Element {...props} />, [])
  const renderLeaf = React.useCallback((props) => <Leaf {...props} />, [])
  const editor = React.useMemo(() => withHistory(withReact(createEditor())), [])
- // const ipc = React.useMemo(() => new IpcService(), [])
+
+
+
+ // refactor
+ React.useEffect(() => {
+  if ((value && referenceValue && !compareObjects(value, referenceValue)) || (selectedNote && referenceTitle !== title)) {
+    setIsNoteChanged(true)
+   } else {
+    setIsNoteChanged(false)
+   }
+ }, [value, title, referenceValue, selectedNote, referenceTitle, setIsNoteChanged])
 
  const handlChangeValue = (value: Node[]) => {
-  if (value && referenceValue && !compareObjects(value, referenceValue)) {
-   setIsNoteChanged(true)
-  } else if (value && referenceValue && compareObjects(value, referenceValue)) {
-   setIsNoteChanged(false)
-  }
   setValue(value)
  }
  const handleChangeTitle = (title: string) => {
   setTitle(title)
-  selectedNote && selectedNote.title !== title
-   ? setIsNoteChanged(true)
-   : setIsNoteChanged(false)
  }
  const handleSaveButtonClick = () => {
-  if (isNoteChanged) {
-   ipc.send('SAVE_NOTE', 'arg')
+  if (isNoteChanged && selectedNote) {
+    // TODO
+    const flatValue = value[0].children[0].text
+    updateNote(selectedNote.id, title, flatValue)
+  }
+ }
+ const handleEditorFocus = () => {
+  if (!selectedNote) {
+    console.log('CREATE NEW NOTE ON FOCUS');
+    createNewNote()
   }
  }
  return (
@@ -98,14 +133,15 @@ const EditorComponent = (props: StateProps) => {
       value={title}
       onChange={(e) => handleChangeTitle(e.target.value)}
       placeholder="Enter title"
+      onFocus={handleEditorFocus}
      />
      <Editable
       className="editable-note"
       renderElement={renderElement}
       renderLeaf={renderLeaf}
-      placeholder="Enter some rich text…"
+      placeholder="Enter some text…"
+      onFocus={handleEditorFocus}
       spellCheck
-      autoFocus
      />
     </div>
    </Slate>

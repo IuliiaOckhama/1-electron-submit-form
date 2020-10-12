@@ -29,7 +29,7 @@ export class IpcService {
     this.ipcRenderer = window.require('electron').ipcRenderer;
   }
 
-  public init(ipcChannels: IpcChannelInterface[] = [new SaveNoteChannel()]) {
+  public init(store:any, ipcChannels: IpcChannelInterface[] = [new SaveNoteChannel(store)]) {
     this.registerIpcChannels(ipcChannels);
     return this.ipcRenderer
   }
