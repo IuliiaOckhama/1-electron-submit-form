@@ -18,7 +18,7 @@ interface StateProps {
 }
 interface DispatchProps {
   createNewNote: () => void,
-  setNewEditorState: (value: NoteState) => void
+  handleEditorChange: (noteState: NoteState) => void
   saveButtonClick: () => void
 }
 const EditorComponent = (props: StateProps & DispatchProps) => {
@@ -26,7 +26,7 @@ const EditorComponent = (props: StateProps & DispatchProps) => {
   data: { selectedNote },
   ui: { isNoteChanged },
   createNewNote,
-  setNewEditorState,
+  handleEditorChange,
   saveButtonClick
  } = props
 
@@ -47,8 +47,8 @@ const EditorComponent = (props: StateProps & DispatchProps) => {
  const updateUserValue = React.useCallback((name, newValue) => {
     setValue({ ...value, [name]: newValue })
     // debounced action
-    setNewEditorState({ ...value, [name]: newValue })
-  }, [setNewEditorState, value]);
+    handleEditorChange({ ...value, [name]: newValue })
+  }, [handleEditorChange, value]);
 
   const handleEditorFocus = React.useCallback(() => {
     if (!selectedNote) {

@@ -1,8 +1,8 @@
 import { Dispatch } from 'redux'
 import { connect } from 'react-redux'
 import { State } from '../../reducers'
-import { createNewNote, setNewEditorState } from '../../actions/dataActions'
-import { saveButtonClick } from '../../actions/uiActions'
+import { createNewNote } from '../../actions/dataActions'
+import { saveButtonClick, handleEditorChange } from '../../actions/uiActions'
 import { NoteState } from '../../entities'
 import Editor from './Editor'
 
@@ -12,7 +12,7 @@ const mapStateToProps = (state: State) => ({
 })
 const mapDispatchToProps = (dispatch: Dispatch) => ({
   createNewNote: () => dispatch(createNewNote()),
-  setNewEditorState: (noteState: NoteState) => dispatch(setNewEditorState(noteState)),
+  handleEditorChange: (noteState: NoteState) => dispatch(handleEditorChange(noteState)),
   saveButtonClick: () => dispatch(saveButtonClick())
  })
 

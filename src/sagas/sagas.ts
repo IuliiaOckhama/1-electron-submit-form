@@ -12,13 +12,13 @@ import {
   SAVE_BUTTON_CLICK,
   SET_SIDEBAR_TAB, 
   SEND_SAVE_CONFIRMATION, 
-  SEND_DELETE_CONFIRMATION, 
-  SET_NEW_EDITOR_STATE, 
+  SEND_DELETE_CONFIRMATION,
   FETCH_NOTES, 
   UPDATE_NOTE,
+  HANDLE_EDITOR_CHANGE,
 } from '../actions/types'
 import { CONFIRM_SAVE_NOTE, CONFIRM_DELETE_NOTE } from '../shared/entities'
-import { Note } from '../entities'
+import { Note, NoteState } from '../entities'
 
 /******************************************************************************/
 /******************************* SELECTORS ************************************/
@@ -33,7 +33,7 @@ const getIsNoteChanged = (state: State) => state.ui.isNoteChanged
 /******************************* ACTIONS **************************************/
 /******************************************************************************/
 
-import { addNewNote, deleteNote, setNotes, setSelectedNote, updateNote, normalizeSelectedNoteState } from '../actions/dataActions'
+import { addNewNote, deleteNote, setNotes, setSelectedNote, updateNote, normalizeSelectedNoteState, setNewEditorState } from '../actions/dataActions'
 import { setRequestError, setIsNoteChanged } from '../actions/uiActions'
 
 /******************************************************************************/
@@ -140,9 +140,13 @@ function* handleSetSidebarTabSaga({ payload }: SetSidebarTabAction) {
     yield put(setRequestError(error.message))
   }
 }
-
-function* setNewEditorState() {
+type HandleEditorChangeAction = {
+  type: typeof SET_SIDEBAR_TAB,
+  payload: NoteState
+}
+function* debounceHandleEditorChange({ payload }: HandleEditorChangeAction) {
   try {
+    yield put(setNewEditorState(payload))
     const selectedNote = yield select(getSelectedNote)
     const isChanged = !compareObjects(selectedNote.prevState, selectedNote.editorState)
     yield put(setIsNoteChanged(isChanged))
@@ -181,12 +185,12 @@ export function* setSidebarTabSaga() {
 /* Debounce saga that compares in real time prev state of the note with new state; 
    if they differ, fires 'setIsNoteChanged' action 
 */
-export function* debouncesetNewEditorStateSaga() {
-  yield takeLatest(SET_NEW_EDITOR_STATE, setNewEditorState)
+export function* debounceHandleEditorChangeSaga() {
+  yield debounce(500, HANDLE_EDITOR_CHANGE, debounceHandleEditorChange)
 }
 /* Saga that controls note saving */
 export function* handleSaveButtonClickSaga() {
-  yield debounce(500, SAVE_BUTTON_CLICK, handleSaveButtonClick)
+  yield takeLatest(SAVE_BUTTON_CLICK, handleSaveButtonClick)
 }
 /* Saga that controls note deletion */
 export function* handleDeleteButtonClickSaga(){
