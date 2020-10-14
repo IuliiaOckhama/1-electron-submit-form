@@ -1,12 +1,14 @@
 import { all } from 'redux-saga/effects'
-import { setNotesSaga, updateNoteSaga, createNewNoteSaga, confirmNoteSaveSaga, deleteNoteSaga } from './sagas'
+import { setNotesSaga, updateNoteSaga, createNewNoteSaga, setSidebarTabSaga, handleDeleteButtonClickSaga, debouncesetNewEditorStateSaga, handleSaveButtonClickSaga } from './sagas'
 function* rootSaga() {
   yield all([
     setNotesSaga(),
     updateNoteSaga(),
     createNewNoteSaga(),
-    deleteNoteSaga(),
-    confirmNoteSaveSaga()
+    handleDeleteButtonClickSaga(),
+    setSidebarTabSaga(),
+    debouncesetNewEditorStateSaga(),
+    handleSaveButtonClickSaga()
   ])
 }
 

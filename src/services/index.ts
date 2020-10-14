@@ -1,6 +1,9 @@
 import { IpcRenderer } from 'electron';
-import { IpcChannelInterface } from '../../shared/entities'
+import { Store } from 'redux'
+import { IpcChannelInterface } from '../shared/entities'
+
 import { SaveNoteChannel } from './SaveNoteChannel'
+import { DeleteNoteChannel } from './DeleteNoteChannel'
 
 export class IpcService {
   public ipcRenderer?: IpcRenderer;
@@ -17,7 +20,6 @@ export class IpcService {
     }
     const ipcRenderer = this.ipcRenderer;
     if (ipcRenderer) {
-      console.log('register channels')
       ipcChannels.forEach(channel => ipcRenderer.on(channel.getName(), (event, request) => channel.handle(event, request)));
     }
   }
@@ -29,11 +31,8 @@ export class IpcService {
     this.ipcRenderer = window.require('electron').ipcRenderer;
   }
 
-  public init(store:any, ipcChannels: IpcChannelInterface[] = [new SaveNoteChannel(store)]) {
+  public init(store:Store, ipcChannels: IpcChannelInterface[] = [new SaveNoteChannel(store), new DeleteNoteChannel(store)]) {
     this.registerIpcChannels(ipcChannels);
     return this.ipcRenderer
   }
 }
-
-
-// (new IpcService()).init([new SaveNoteChannel()]);

@@ -1,6 +1,7 @@
 import * as React from 'react'
 import SidebarNote from '../../components/SidebarNote'
-import { DataStoreStructure, Note, UiStoreStructure } from '../../entities'
+import { Note } from '../../entities'
+import { DataStoreStructure, UiStoreStructure } from '../../entities/storeTypes'
 import './Sidebar.css'
 
 interface StateProps {
@@ -8,27 +9,24 @@ interface StateProps {
  ui: UiStoreStructure
 }
 interface DispatchProps {
- setSelectedNote: (note: Note) => void;
  createNewNote: () => void
- confirmNoteSave: () => void
- deleteNote: () => void
+ setSidebarTab: (note: Note) => void
+ deleteButtonClick: () => void
 }
 
 export default function Sidebar(props: StateProps & DispatchProps) {
  const {
   data: { notes, selectedNote },
-  ui: { isNoteChanged },
-  setSelectedNote,
   createNewNote,
-  confirmNoteSave,
-  deleteNote
+  setSidebarTab,
+  deleteButtonClick,
  } = props
+
  const handleSidebarNoteClick = React.useCallback(
   (note: Note) => {
-    confirmNoteSave()
-    setSelectedNote(note)
+    setSidebarTab(note)
   },
-  [confirmNoteSave, setSelectedNote]
+  [setSidebarTab]
  )
 
  return (
@@ -41,7 +39,7 @@ export default function Sidebar(props: StateProps & DispatchProps) {
       <input className="sidebar__input" type="text" placeholder="Search by keyword..." />
       <div className="sidebar__buttons-container">
        <button onClick={createNewNote} className="sidebar__button sidebar__button_save"></button>
-       <button onClick={deleteNote} className="sidebar__button sidebar__button_delete">Delete Note</button>
+       <button onClick={deleteButtonClick} className="sidebar__button sidebar__button_delete">Delete Note</button>
      </div>
     </div>
    <div className="sidebar__notes-list">

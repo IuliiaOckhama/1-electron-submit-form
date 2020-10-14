@@ -2,10 +2,7 @@
 import { combineReducers } from 'redux'
 import dataReducer from './dataReducer'
 import uiReducer from './uiReducer'
-import {
-  DataStoreStructure,
-  UiStoreStructure
-} from '../entities'
+import { DataStoreStructure, UiStoreStructure } from '../entities/storeTypes'
 
 const rootReducer = () =>
   combineReducers({

@@ -29,3 +29,21 @@ export const compareObjects = function (obj1: any, obj2: any) {
  }
  return true
 }
+
+export const isValidJson = function (str: string) {
+  try {
+    const json = JSON.parse(str);
+    return Array.isArray(json)
+  } catch (e) {
+    return false;
+  }
+}
+
+export const convertStringContent = function(str: string) {
+  return [
+    {
+      type: 'paragraph',
+      children: [{ text: `${str}` }],
+    },
+  ] 
+}

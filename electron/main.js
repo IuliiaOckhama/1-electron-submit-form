@@ -7,7 +7,8 @@ var electron_1 = require("electron");
 var MainWindow_1 = require("./MainWindow");
 var Menu_1 = require("./Menu");
 var AppManager_1 = __importDefault(require("./AppManager"));
-var SubmitUsernameChannel_1 = require("./SubmitUsernameChannel");
+var ConfirmSaveNoteChannel_1 = require("./ConfirmSaveNoteChannel");
+var ConfirmDeleteNoteChannel_1 = require("./ConfirmDeleteNoteChannel");
 var Main = /** @class */ (function () {
     function Main() {
     }
@@ -28,7 +29,7 @@ var Main = /** @class */ (function () {
         var _this = this;
         electron_1.app.on('ready', function () {
             _this.setupApplication();
-            var ipcChannels = [new SubmitUsernameChannel_1.SubmitUsernameChannel(AppManager_1.default.getWindow('MainWindow'))];
+            var ipcChannels = [new ConfirmSaveNoteChannel_1.ConfirmSaveNoteChannel(AppManager_1.default.getWindow('MainWindow')), new ConfirmDeleteNoteChannel_1.ConfirmDeleteNoteChannel(AppManager_1.default.getWindow('MainWindow'))];
             _this.registerIpcChannels(ipcChannels);
         });
         electron_1.app.disableHardwareAcceleration();

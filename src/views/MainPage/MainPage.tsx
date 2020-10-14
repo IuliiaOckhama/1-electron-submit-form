@@ -1,27 +1,26 @@
 import * as React from 'react'
 import './MainPage.css'
 
-import Sidebar from '../../containers/Sidebar'
 import Editor from '../../containers/Editor'
-
-import { DataStoreStructure } from '../../entities'
+import ErrorMessage from '../../containers/ErrorMessage'
+import Sidebar from '../../containers/Sidebar'
 
 interface DispatchProps {
  fetchNotes: () => void;
 }
-interface StateProps {
- data: DataStoreStructure;
-}
-
 export default function MainPage(
- props: StateProps & DispatchProps
+ props: DispatchProps
 ): React.ReactElement {
  const { fetchNotes } = props
+
  React.useEffect(() => {
   fetchNotes()
- }, [fetchNotes])
+ // eslint-disable-next-line react-hooks/exhaustive-deps
+ }, [])
+
  return (
   <div className="main-container">
+   <ErrorMessage />
    <Sidebar />
    <Editor />
   </div>

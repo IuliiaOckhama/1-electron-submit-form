@@ -1,6 +1,6 @@
 import { AnyAction } from 'redux'
 import { SET_REQUEST_ERROR, SET_IS_NOTE_CHANGED } from '../actions/types'
-import { UiStoreStructure } from '../entities'
+import { UiStoreStructure } from '../entities/storeTypes'
 
 const initState: UiStoreStructure = {
  reqError: null,

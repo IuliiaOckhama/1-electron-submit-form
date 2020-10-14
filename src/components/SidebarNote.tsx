@@ -1,15 +1,15 @@
 import React from 'react'
-import { Note } from '../entities'
+import { SelectedNote, Note } from '../entities'
 
 type Props = {
  note: Note,
- selectedNote: Note | null,
+ selectedNote: SelectedNote | null,
  handleSidebarNoteClick: (note: Note) => void,
 }
 
 export default function SidebarNote(props: Props) {
  const { note, selectedNote, handleSidebarNoteClick } = props
- const createdDate = new Date(note.created)
+ const lastUpdatedDate = new Date(note.updated)
  const isSelected = selectedNote && selectedNote.id === note.id
  return (
   <div
@@ -19,9 +19,8 @@ export default function SidebarNote(props: Props) {
    }}
    onClick={() => handleSidebarNoteClick(note)}
   >
-   <h4>{note.title}</h4>
-   {/* <p className="sidebar__note-content">{note.content}</p> */}
-   <p>{createdDate.toLocaleDateString('en-US')}</p>
+   <h4>{note.title.length > 0 ? note.title : 'New Untitled Note'}</h4>
+   <p>{`UPD: ${lastUpdatedDate.toLocaleDateString('en-US')}`}</p>
   </div>
  )
 }

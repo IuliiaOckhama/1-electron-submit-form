@@ -1,15 +1,16 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.SubmitUsernameChannel = void 0;
+exports.ConfirmSaveNoteChannel = void 0;
 var electron_1 = require("electron");
-var SubmitUsernameChannel = /** @class */ (function () {
-    function SubmitUsernameChannel(window) {
+var entities_1 = require("../src/shared/entities");
+var ConfirmSaveNoteChannel = /** @class */ (function () {
+    function ConfirmSaveNoteChannel(window) {
         this.window = window;
     }
-    SubmitUsernameChannel.prototype.getName = function () {
-        return 'CONFIRM_SAVE_NOTE';
+    ConfirmSaveNoteChannel.prototype.getName = function () {
+        return entities_1.CONFIRM_SAVE_NOTE;
     };
-    SubmitUsernameChannel.prototype.handle = function (event, request) {
+    ConfirmSaveNoteChannel.prototype.handle = function (event, request) {
         var _this = this;
         var options = {
             type: 'warning',
@@ -22,9 +23,9 @@ var SubmitUsernameChannel = /** @class */ (function () {
         answer.then(function (_a) {
             var response = _a.response;
             var res = response === 0 ? true : false;
-            _this.window.webContents.send('SAVE_NOTE_RESPONSE', res);
+            _this.window.webContents.send(entities_1.SAVE_NOTE_RESPONSE, res);
         });
     };
-    return SubmitUsernameChannel;
+    return ConfirmSaveNoteChannel;
 }());
-exports.SubmitUsernameChannel = SubmitUsernameChannel;
+exports.ConfirmSaveNoteChannel = ConfirmSaveNoteChannel;

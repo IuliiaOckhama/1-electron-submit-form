@@ -1,7 +1,7 @@
-import { IpcChannelInterface, IpcRequest } from '../shared/entities'
 import { IpcMainEvent, dialog, BrowserWindow } from 'electron'
+import { IpcChannelInterface, IpcRequest, CONFIRM_SAVE_NOTE, SAVE_NOTE_RESPONSE } from '../src/shared/entities'
 
-export class SubmitUsernameChannel implements IpcChannelInterface {
+export class ConfirmSaveNoteChannel implements IpcChannelInterface {
 
   private readonly window: BrowserWindow;
 
@@ -9,7 +9,7 @@ export class SubmitUsernameChannel implements IpcChannelInterface {
     this.window = window;
   }
   getName(): string {
-    return 'CONFIRM_SAVE_NOTE'
+    return CONFIRM_SAVE_NOTE
   }
 
  handle(event: IpcMainEvent, request: IpcRequest): void {
@@ -23,7 +23,7 @@ export class SubmitUsernameChannel implements IpcChannelInterface {
   const answer = dialog.showMessageBox(options)
   answer.then(({response}) => {
     const res = response === 0 ? true : false
-    this.window.webContents.send('SAVE_NOTE_RESPONSE', res)
+    this.window.webContents.send(SAVE_NOTE_RESPONSE, res)
   })
  }
 }

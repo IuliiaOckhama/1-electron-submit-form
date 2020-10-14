@@ -1,8 +1,8 @@
 import { Dispatch } from 'redux'
 import { connect } from 'react-redux'
 import { State } from '../../reducers'
-import { setSelectedNote, createNewNote, deleteNote } from '../../actions/dataActions'
-import { confirmNoteSave } from '../../actions/uiActions'
+import { createNewNote } from '../../actions/dataActions'
+import { setSidebarTab, deleteButtonClick } from '../../actions/uiActions'
 import { Note } from '../../entities'
 
 import Sidebar from './Sidebar'
@@ -13,10 +13,9 @@ const mapStateToProps = (state: State) => ({
 })
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
- confirmNoteSave: () => dispatch(confirmNoteSave()),
- setSelectedNote: (note: Note) => dispatch(setSelectedNote(note)),
  createNewNote: () => dispatch(createNewNote()),
- deleteNote: () => dispatch(deleteNote()),
+ deleteButtonClick: () => dispatch(deleteButtonClick()),
+ setSidebarTab: (note: Note) => dispatch(setSidebarTab(note)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Sidebar)

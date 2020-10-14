@@ -2,8 +2,9 @@ import { app, ipcMain } from 'electron'
 import { MainWindow } from './MainWindow'
 import { NativeMenu } from './Menu'
 import AppManager from './AppManager'
-import { SubmitUsernameChannel } from './SubmitUsernameChannel'
-import { IpcChannelInterface } from '../shared/entities'
+import { ConfirmSaveNoteChannel } from './ConfirmSaveNoteChannel'
+import { ConfirmDeleteNoteChannel } from './ConfirmDeleteNoteChannel'
+import { IpcChannelInterface } from '../src/shared/entities'
 
 class Main {
   private onWindowAllClosed() {
@@ -22,7 +23,7 @@ class Main {
   public init() {
     app.on('ready', () => {
       this.setupApplication()
-      const ipcChannels:IpcChannelInterface[] = [new SubmitUsernameChannel(AppManager.getWindow('MainWindow'))]
+      const ipcChannels:IpcChannelInterface[] = [new ConfirmSaveNoteChannel(AppManager.getWindow('MainWindow')), new ConfirmDeleteNoteChannel(AppManager.getWindow('MainWindow'))]
       this.registerIpcChannels(ipcChannels);
     });
     app.disableHardwareAcceleration()

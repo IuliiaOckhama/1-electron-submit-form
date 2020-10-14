@@ -2,8 +2,27 @@ import * as React from 'react'
 import { useSlate} from 'slate-react'
 import { Editor, Transforms } from 'slate'
 import { ReactEditor } from 'slate-react/dist/plugin/react-editor';
-import { BaseProps, OrNull, BlockButtonFormats, BlockButtonProps, MarkButtonFormats, MarkButtonProps } from '../entities'
+import { BaseProps, OrNull } from '../entities'
 import { LIST_TYPES } from '../constants'
+
+/* types */
+const BlockButtonFormats = ['heading-one', 'heading-two'];
+type BlockButtonFormats = typeof BlockButtonFormats[number]
+const BlockButtonIcons = ['h1', 'h2'] as const;
+type BlockButtonIcons = typeof BlockButtonIcons[number]
+export interface BlockButtonProps {
+  format: BlockButtonFormats,
+  icon: BlockButtonIcons
+}
+const MarkButtonFormats = ['bold', 'italic', 'underline', 'code'];
+export type MarkButtonFormats = typeof MarkButtonFormats[number]
+const MarkButtonIcons = ['bold', 'italic', 'underlined', 'code'];
+type MarkButtonIcons = typeof MarkButtonIcons[number]
+export interface MarkButtonProps {
+  format: MarkButtonFormats,
+  icon: MarkButtonIcons
+}
+
 
 const isMarkActive = (editor:ReactEditor, format:MarkButtonFormats) => {
   const marks = Editor.marks(editor)
