@@ -7,7 +7,7 @@ type NewNoteReq = {
 }
 
 const server = 'https://actimindtraining.azurewebsites.net/api/notes'
-export const fetchNotesApi = () => axios.get(server)
+export const fetchNotesApi = (page: number) => axios.get(`${server}/?page=${page}`)
 export const updateNoteApi = (note: Note) => axios.put(`${server}/${note.id}`, note)
 export const createNewNoteApi = (note: NewNoteReq) => axios.post(`${server}`, note)
 export const deleteNoteApi = (id: number) => axios.delete(`${server}/${id}`)

@@ -15,7 +15,7 @@ export default function SidebarNote(props: Props) {
   <div
    className="sidebar__note"
    style={{
-    borderColor: isSelected ? 'blue' : 'transparent',
+    borderColor: isSelected ? 'rgba(129, 144, 183, 0.5)' : 'transparent',
    }}
    onClick={() => handleSidebarNoteClick(note)}
   >

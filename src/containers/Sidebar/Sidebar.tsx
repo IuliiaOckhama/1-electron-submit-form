@@ -1,4 +1,5 @@
 import * as React from 'react'
+import InfiniteScroll from 'react-infinite-scroll-component'
 import SidebarNote from '../../components/SidebarNote'
 import { Note } from '../../entities'
 import { DataStoreStructure, UiStoreStructure } from '../../entities/storeTypes'
@@ -12,6 +13,7 @@ interface DispatchProps {
  createNewNote: () => void
  setSidebarTab: (note: Note) => void
  deleteButtonClick: () => void
+ fetchNotes: () => void
 }
 
 export default function Sidebar(props: StateProps & DispatchProps) {
@@ -20,6 +22,7 @@ export default function Sidebar(props: StateProps & DispatchProps) {
   createNewNote,
   setSidebarTab,
   deleteButtonClick,
+  fetchNotes
  } = props
 
  const handleSidebarNoteClick = React.useCallback(
@@ -29,6 +32,11 @@ export default function Sidebar(props: StateProps & DispatchProps) {
   [setSidebarTab]
  )
 
+ const loadMore = () => {
+   console.log('loadMore');
+   fetchNotes()
+ }
+
  return (
   <div className="sidebar">
     <div className="sidebar__header">
@@ -36,22 +44,38 @@ export default function Sidebar(props: StateProps & DispatchProps) {
         <h3>All notes</h3>
         <p>{notes.length} notes</p>
       </div>
-      <input className="sidebar__input" type="text" placeholder="Search by keyword..." />
+      <div className="sidebar__sortBy-container">
+        <span>Search by:</span>
+      </div>
       <div className="sidebar__buttons-container">
        <button onClick={createNewNote} className="sidebar__button sidebar__button_save"></button>
-       <button onClick={deleteButtonClick} className="sidebar__button sidebar__button_delete">Delete Note</button>
+       <button onClick={deleteButtonClick} className="sidebar__button sidebar__button_delete">Delete</button>
      </div>
     </div>
-   <div className="sidebar__notes-list">
-    {notes.map((note: Note) => (
-     <SidebarNote
-      key={note.id}
-      note={note}
-      selectedNote={selectedNote}
-      handleSidebarNoteClick={handleSidebarNoteClick}
-     />
-    ))}
+  
+    <InfiniteScroll
+      dataLength={notes.length}
+      next={loadMore}
+      hasMore={true}
+      loader={<span></span>}
+      scrollableTarget="sidebar__notes-container"
+      endMessage={
+        <p style={{ textAlign: 'center' }}>
+          <b>Yay! You have seen it all</b>
+        </p>
+      }
+    >
+      <div className="sidebar__notes-container" id="sidebar__notes-container">
+        {notes.map((note: Note) => (
+          <SidebarNote
+            key={note.id}
+            note={note}
+            selectedNote={selectedNote}
+            handleSidebarNoteClick={handleSidebarNoteClick}
+          />
+        ))}
+      </div>
+    </InfiniteScroll>  
    </div>
-  </div>
  )
 }

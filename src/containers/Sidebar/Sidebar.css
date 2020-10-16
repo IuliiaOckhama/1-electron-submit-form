@@ -1,6 +1,10 @@
 .sidebar {
-  border: 3px solid blue;
+  background: #E4EBF5;
+  box-shadow:.8rem .8rem 1.4rem #c8d0e7, 
+            -.2rem -.2rem 1.8rem #FFFFFF;
+  border-radius: 30px;
   width: 30%;
+  transition: all .4s ease;
 }
 .sidebar__header {
   display: flex;
@@ -9,16 +13,11 @@
   margin-block-end: 0;
   padding: 10px;
   box-sizing: border-box;
-  height: 20%;
-  border-bottom: 2px solid grey;
+  height: 12.5rem;
 }
 .sidebar__title h3 {
   margin-block-start: 0;
   margin-block-end: 0;
-}
-.sidebar__notes-list {
-  overflow-y: auto;
-  height: 80%;
 }
 .sidebar__note {
   text-align: start;
@@ -27,7 +26,7 @@
   border-style: solid;
 }
 .sidebar__note:hover {
-  background: lightgrey;
+  background: rgba(255, 255, 255, 0.2);
   cursor: pointer;
 }
 .sidebar__note-content {
@@ -41,33 +40,36 @@
   justify-content: space-between;
 }
 .sidebar__button {
-  color: unset;
-  text-align: center;
-  align-items: flex-start;
-  cursor: default;
-  background-color: white;
-  box-sizing: border-box;
-  margin: 0em;
-  font: unset;
-  padding: 1px 6px;
+  box-shadow: 3px 3px 6px #c8d0e7, -2px -2px 5px #ffffff;
+  background-color: unset;
   cursor: pointer;
+  position: relative;
+  display: -webkit-box;
+  display: flex;
+  -webkit-box-pack: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  align-items: center;
+  border-radius: .5rem;
+  transition: all .4s ease;
 }
 .sidebar__button_save {
-  color: blue;
-  border: 2px solid blue;
+  width: 2.8rem;
+  height: 2.8rem;
+  color: unset;
+  border: unset;
   font-weight: bold;
   height: 30px;
   width: 30px;
   position: relative;
 }
 .sidebar__button_save:hover {
-  background-color: blue;
-  color: white;
+  color: #6d5dfc;
 }
 .sidebar__button_save:after, .sidebar__button_save:before {
   content: "";
   display: block;
-  background-color: blue;
+  background-color: #9baacf;
   position: absolute;
   top: 50%;
   left: 50%;
@@ -84,28 +86,49 @@
 .sidebar__button_save:hover:before {
   height: 1em;
   width: 0.2em;
-  background-color: white;
+  background-color: #6d5dfc;
 }
 .sidebar__button_save:hover:after {
   height: 0.2em;
   width: 1em;
-  background-color: white;
+  background-color: #6d5dfc;
 }
 .sidebar__button_delete {
-  border: 2px solid red;
+  color: #9baacf;
+  border: unset;
+  font-family: 'Space Mono', monospace;
+  font-size: 18px;
 }
 .sidebar__button_delete:hover {
-  background-color: red;
-  color: white;
+  color: #6d5dfc;
 }
 .sidebar__input {
   font: inherit;
   font-weight: bold;
   border-color: transparent;
   border-width: 0;
-  border-bottom: 2px solid grey;
-  margin: 10px 0px;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.5);
+  background-color: transparent;
+  border: none;
+  border-radius: 0.5rem;
+  box-shadow: inset 0.2rem 0.2rem 0.5rem #c8d0e7, inset -0.2rem -0.2rem 0.5rem #ffffff;
+  background: none;
+  font-family: inherit;
+  color: inherit;
+  padding: 0.5rem 0.8rem;
+  margin: 1rem 0;
+}
+.sidebar__input::placeholder {
+  color: #9baacf;
 }
 .sidebar__input:focus {
-  border-bottom: 2px solid blue;
+  outline: none;
+}
+.sidebar__notes-container {
+  overflow-y: scroll;
+  height: 31rem;
+  width: 98%;
+}
+.sidebar__sortBy-container {
+  text-align: left;
 }

@@ -1,20 +1,30 @@
 import { AnyAction } from 'redux'
-import { ADD_NEW_NOTE, DELETE_NOTE, SET_NOTES, SET_SELECTED_NOTE, SET_NEW_EDITOR_STATE, NORMALIZE_SELECTED_NOTE_STATE, UPDATE_NOTE } from '../actions/types'
+import { 
+  ADD_NEW_NOTE, 
+  DELETE_NOTE, 
+  SET_NOTES, 
+  SET_PAGE,
+  SET_SELECTED_NOTE, 
+  SET_NEW_EDITOR_STATE, 
+  NORMALIZE_SELECTED_NOTE_STATE, 
+  UPDATE_NOTE } from '../actions/types'
 import { Note } from '../entities'
 import { DataStoreStructure } from '../entities/storeTypes'
 
 import { isValidJson, convertStringContent } from '../helpers'
+import { INITIAL_VALUE } from '../constants'
 
 const initState: DataStoreStructure = {
  notes: [],
+ page: 1,
  selectedNote: {
    id: null,
    prevState: {
-     content: [],
+     content: INITIAL_VALUE,
      title: ''
    },
    editorState: {
-    content: [],
+    content: INITIAL_VALUE,
     title: ''
   },
  },
@@ -29,9 +39,10 @@ const dataReducer = (state = initState, action: AnyAction) => {
   case SET_NOTES:
    return {
     ...state,
-    notes: action.payload,
+    notes: state.notes.concat(action.payload),
    }
   case SET_SELECTED_NOTE:
+  console.log('SET_SELECTED_NOTE')
    if (action.payload === null) {
       return initState.selectedNote
    }
@@ -50,12 +61,20 @@ const dataReducer = (state = initState, action: AnyAction) => {
       }
     },
    }
+  case SET_PAGE:
+    console.log('SET_PAGE')
+    return {
+      ...state,
+      page: action.payload
+    }
   case ADD_NEW_NOTE:
+    console.log('ADD_NEW_NOTE')
     return {
       ...state,
       notes: [action.payload, ...state.notes]
     }
   case UPDATE_NOTE:
+    console.log('UPDATE_NOTE')
     const noteToUpdate = state.notes.find((note: Note) => note.id === action.payload.id)
     if (noteToUpdate) {
       noteToUpdate.title = action.payload.title
@@ -70,6 +89,7 @@ const dataReducer = (state = initState, action: AnyAction) => {
       return state
     } 
   case DELETE_NOTE:
+    console.log('DELETE_NOTE')
     if (state.selectedNote) {
       return {
         ...state,
@@ -79,6 +99,7 @@ const dataReducer = (state = initState, action: AnyAction) => {
       return state
     } 
   case SET_NEW_EDITOR_STATE:
+    console.log('SET_NEW_EDITOR_STATE')
     return {
       ...state,
       selectedNote: {
@@ -87,6 +108,7 @@ const dataReducer = (state = initState, action: AnyAction) => {
       }
     }
   case NORMALIZE_SELECTED_NOTE_STATE: {
+    console.log('NORMALIZE_SELECTED_NOTE_STATE')
     return {
       ...state,
       selectedNote: {

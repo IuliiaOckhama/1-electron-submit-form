@@ -27,13 +27,14 @@ import { Note, NoteState } from '../entities'
 import { State } from '../reducers'
 const getNotes = (state: State) => state.data.notes
 const getSelectedNote = (state: State) => state.data.selectedNote
+const getPage = (state: State) => state.data.page
 const getIsNoteChanged = (state: State) => state.ui.isNoteChanged
 
 /******************************************************************************/
 /******************************* ACTIONS **************************************/
 /******************************************************************************/
 
-import { addNewNote, deleteNote, setNotes, setSelectedNote, updateNote, normalizeSelectedNoteState, setNewEditorState } from '../actions/dataActions'
+import { addNewNote, deleteNote, setNotes, setSelectedNote, setPage, updateNote, normalizeSelectedNoteState, setNewEditorState } from '../actions/dataActions'
 import { setRequestError, setIsNoteChanged } from '../actions/uiActions'
 
 /******************************************************************************/
@@ -48,17 +49,22 @@ import { compareObjects } from '../helpers'
 /******************************* SAGAS *************************************/
 /******************************************************************************/
 
-function* handleSetNotesSaga() {
+function* handleFetchNotesSaga() {
  try {
-  const notes = yield call(fetchNotesApi)
+  const page = yield select(getPage)
+  const notes = yield call(fetchNotesApi, page)
+  yield put(setPage(page + 1))
   yield put(setNotes(notes.data))
-  yield put(setSelectedNote(notes.data[0]))
+  if (page === 1) {
+    yield put(setSelectedNote(notes.data[0]))
+  }
  } catch (error) {
   const err = new Error(error)
   console.log(err.stack)
   yield put(setRequestError(error.message))
  }
 }
+
 
 type UpdateNoteAction = {
   type: typeof UPDATE_NOTE,
@@ -146,9 +152,9 @@ type HandleEditorChangeAction = {
 }
 function* debounceHandleEditorChange({ payload }: HandleEditorChangeAction) {
   try {
-    yield put(setNewEditorState(payload))
     const selectedNote = yield select(getSelectedNote)
-    const isChanged = !compareObjects(selectedNote.prevState, selectedNote.editorState)
+    const isChanged = !compareObjects(selectedNote.prevState, payload)
+    yield put(setNewEditorState(payload))
     yield put(setIsNoteChanged(isChanged))
   } catch (error) {
     const err = new Error(error)
@@ -168,8 +174,8 @@ function* handleSaveButtonClick() {
   }
 }
 
-export function* setNotesSaga() {
- yield takeLatest(FETCH_NOTES, handleSetNotesSaga)
+export function* fetchNotesSaga() {
+ yield takeLatest(FETCH_NOTES, handleFetchNotesSaga)
 }
 export function* updateNoteSaga(){
   yield takeLatest(UPDATE_NOTE, handleUpdateNoteSaga)

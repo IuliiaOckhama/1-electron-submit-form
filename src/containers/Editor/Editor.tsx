@@ -44,18 +44,17 @@ const EditorComponent = (props: StateProps & DispatchProps) => {
  const renderLeaf = React.useCallback((props) => <Leaf {...props} />, [])
  const editor = React.useMemo(() => withHistory(withReact(createEditor())), [])
 
- const updateUserValue = React.useCallback((name, newValue) => {
+ const updateUserValue = (name:string, newValue:Node[]) => {
     setValue({ ...value, [name]: newValue })
     // debounced action
     handleEditorChange({ ...value, [name]: newValue })
-  }, [handleEditorChange, value]);
+  }
 
   const handleEditorFocus = React.useCallback(() => {
     if (!selectedNote) {
       createNewNote()
     }
   }, [createNewNote, selectedNote])
-
 
  return (
   <div className="editor-container">
@@ -66,6 +65,7 @@ const EditorComponent = (props: StateProps & DispatchProps) => {
        ? 'editor-container__button_active'
        : 'editor-container__button_disabled'
      }`}
+     disabled={isNoteChanged ? false : true}
      onClick={saveButtonClick}
     >
      Save
