@@ -1,7 +1,7 @@
 import { Dispatch } from 'redux'
 import { connect } from 'react-redux'
 import { State } from '../../reducers'
-import { createNewNote, fetchNotes } from '../../actions/dataActions'
+import { createNewNote, setSortBy, fetchNotes } from '../../actions/dataActions'
 import { setSidebarTab, deleteButtonClick } from '../../actions/uiActions'
 import { Note } from '../../entities'
 
@@ -17,6 +17,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
  deleteButtonClick: () => dispatch(deleteButtonClick()),
  fetchNotes: () => dispatch(fetchNotes()),
  setSidebarTab: (note: Note) => dispatch(setSidebarTab(note)),
+ setSortBy: (sortBy: string) => dispatch(setSortBy(sortBy))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Sidebar)

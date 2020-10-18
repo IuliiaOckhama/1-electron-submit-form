@@ -2,7 +2,9 @@ import { AnyAction } from 'redux'
 import { 
   ADD_NEW_NOTE, 
   DELETE_NOTE, 
-  SET_NOTES, 
+  SET_NOTES,
+  SET_SORTED_NOTES,
+  SET_SORTBY, 
   SET_PAGE,
   SET_SELECTED_NOTE, 
   SET_NEW_EDITOR_STATE, 
@@ -17,8 +19,10 @@ import { INITIAL_VALUE } from '../constants'
 const initState: DataStoreStructure = {
  notes: [],
  page: 1,
+ sortBy: '',
  selectedNote: {
    id: null,
+   isDirty: false,
    prevState: {
      content: INITIAL_VALUE,
      title: ''
@@ -41,6 +45,11 @@ const dataReducer = (state = initState, action: AnyAction) => {
     ...state,
     notes: state.notes.concat(action.payload),
    }
+  case SET_SORTED_NOTES:
+    return {
+      ...state,
+      notes: action.payload
+    }
   case SET_SELECTED_NOTE:
   console.log('SET_SELECTED_NOTE')
    if (action.payload === null) {
@@ -66,6 +75,12 @@ const dataReducer = (state = initState, action: AnyAction) => {
     return {
       ...state,
       page: action.payload
+    }
+  case SET_SORTBY:
+    console.log('SET_SORTBY')
+    return {
+      ...state,
+      sortBy: action.payload
     }
   case ADD_NEW_NOTE:
     console.log('ADD_NEW_NOTE')

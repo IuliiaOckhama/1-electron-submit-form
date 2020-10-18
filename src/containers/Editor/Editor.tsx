@@ -30,25 +30,37 @@ const EditorComponent = (props: StateProps & DispatchProps) => {
   saveButtonClick
  } = props
 
+ // isDirty
+ // if isDirty - change button type ISChanged remove
+ // if isDirty = true - call ipc
+ // in store - могу ли я не хранить изначальный стейт заметки?
+
+
  React.useEffect(() => {
   if (selectedNote.id) {
-    setValue({
+    setEditorValue({
       content: selectedNote.prevState.content,
       title: selectedNote.prevState.title
     })
   }
  }, [selectedNote.id, selectedNote.prevState])
 
- const [value, setValue] = React.useState<NoteState>({ content: INITIAL_VALUE, title: '' })
+ const [editorValue, setEditorValue] = React.useState<NoteState>({ content: INITIAL_VALUE, title: '' })
  const renderElement = React.useCallback((props) => <Element {...props} />, [])
  const renderLeaf = React.useCallback((props) => <Leaf {...props} />, [])
  const editor = React.useMemo(() => withHistory(withReact(createEditor())), [])
 
- const updateUserValue = (name:string, newValue:Node[]) => {
-    setValue({ ...value, [name]: newValue })
-    // debounced action
-    handleEditorChange({ ...value, [name]: newValue })
+ const updateUserValue = (name:string, newValue:Node[]|string) => {
+    const newValueState = { ...editorValue, [name]: newValue }
+    setEditorValue(newValueState)
+    if (newValueState !== editorValue) {
+      console.log(newValueState, newValue);
+      // debounced action
+      handleEditorChange(newValueState)
+    }
   }
+
+  console.log(selectedNote.prevState);
 
   const handleEditorFocus = React.useCallback(() => {
     if (!selectedNote) {
@@ -73,7 +85,7 @@ const EditorComponent = (props: StateProps & DispatchProps) => {
    </div>
    <Slate
     editor={editor}
-    value={value.content}
+    value={editorValue.content}
     onChange={(value) => updateUserValue('content', value)}
    >
     <div className="editor">
@@ -88,7 +100,7 @@ const EditorComponent = (props: StateProps & DispatchProps) => {
      <input
       className="title-input"
       type="text"
-      value={value.title}
+      value={editorValue.title}
       onChange={(e) => updateUserValue('title', e.target.value)}
       placeholder="Enter title"
       onFocus={handleEditorFocus}

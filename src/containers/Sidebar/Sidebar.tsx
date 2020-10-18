@@ -1,6 +1,7 @@
 import * as React from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import SidebarNote from '../../components/SidebarNote'
+import SelectInput from '../../components/SelectInput'
 import { Note } from '../../entities'
 import { DataStoreStructure, UiStoreStructure } from '../../entities/storeTypes'
 import './Sidebar.css'
@@ -12,6 +13,7 @@ interface StateProps {
 interface DispatchProps {
  createNewNote: () => void
  setSidebarTab: (note: Note) => void
+ setSortBy: (sortBy: string) => void
  deleteButtonClick: () => void
  fetchNotes: () => void
 }
@@ -21,6 +23,7 @@ export default function Sidebar(props: StateProps & DispatchProps) {
   data: { notes, selectedNote },
   createNewNote,
   setSidebarTab,
+  setSortBy,
   deleteButtonClick,
   fetchNotes
  } = props
@@ -36,6 +39,10 @@ export default function Sidebar(props: StateProps & DispatchProps) {
    console.log('loadMore');
    fetchNotes()
  }
+ const handleSelectSearchQueryOption = (sortBy: any) => {
+   console.log('search query is', sortBy);
+   setSortBy(sortBy)
+ }
 
  return (
   <div className="sidebar">
@@ -45,7 +52,14 @@ export default function Sidebar(props: StateProps & DispatchProps) {
         <p>{notes.length} notes</p>
       </div>
       <div className="sidebar__sortBy-container">
-        <span>Search by:</span>
+        <SelectInput placeholder="Sort by:"
+          value={''}
+          options={[
+            { value: 'Title' },
+            { value: 'Updated' },
+            { value: 'Created' },
+          ]}
+          handleSelectOption={handleSelectSearchQueryOption} />
       </div>
       <div className="sidebar__buttons-container">
        <button onClick={createNewNote} className="sidebar__button sidebar__button_save"></button>

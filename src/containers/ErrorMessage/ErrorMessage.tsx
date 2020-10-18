@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { UiStoreStructure } from '../../entities'
+import { UiStoreStructure } from '../../entities/storeTypes'
 import './ErrorMessage.css'
 
 interface StateProps {

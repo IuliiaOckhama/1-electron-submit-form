@@ -12,6 +12,7 @@ export type NoteState = {
 }
 export type SelectedNote = {
   id: number | null,
+  isDirty: false,
   prevState: NoteState,
   editorState: NoteState
 }

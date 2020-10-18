@@ -53,6 +53,9 @@
   border-radius: .5rem;
   transition: all .4s ease;
 }
+.sidebar__button:focus {
+  outline: none;
+}
 .sidebar__button_save {
   width: 2.8rem;
   height: 2.8rem;
@@ -126,9 +129,87 @@
 }
 .sidebar__notes-container {
   overflow-y: scroll;
-  height: 31rem;
+  height: 26rem;
   width: 98%;
 }
 .sidebar__sortBy-container {
   text-align: left;
+}
+
+/* SELECT STYLES */
+.select-container {
+  flex-basis: 50%;
+  margin-right: .5rem;
+}
+
+.select-container svg {
+  display: block;
+  width: 1em;
+  height: 1em;
+  fill: grey;
+}
+
+.select {
+  position: relative;
+  display: inline-block;
+  min-width: 11rem;
+  width: 100%;
+  margin: 1rem 0;
+}
+.select:focus {
+  outline: 0;
+}
+.select__input {
+  position: relative;
+  box-shadow: 3px 3px 6px #c8d0e7, -2px -2px 5px #ffffff;
+  background-color: unset;
+  cursor: pointer;
+  border-radius: .5rem;
+}
+.select__input_open {
+  border-radius: .5rem .5rem 0px 0px;
+}
+.select__value {
+  position: relative;
+  display: inline-block;
+  padding: 0.5rem .5rem;
+}
+.select__placeholder {
+  padding: 0.25rem .5rem;
+  color: #8190b7;
+}
+.select__arrow {
+  position: absolute;
+  top: 0.25rem;
+  right: 0.25rem;
+  display: block;
+  padding: .5rem;
+  font-size: .5rem;
+  color: grey;
+}
+.select__options {
+  position: absolute;
+  box-shadow: 3px 3px 6px #c8d0e7, -2px -2px 5px #ffffff;
+  z-index: 200;
+  top: 100%;
+  left: 0;
+  right: 0;
+  border-width: 0 1px;
+}
+.select__option {
+  padding: .5rem .7rem;
+  border-bottom: 1px solid #c8d0e7;
+  background-color: #E4EBF5;
+  cursor: pointer;
+}
+.select__option_selected {
+  margin: -1px -1px 0;
+  background: #f2f5f9;
+  pointer-events: none;
+}
+.select__option_focused {
+  background: #f2f5f9;
+}
+.select__option_last {
+  border-radius: 0px 0px .5rem .5rem;
 }

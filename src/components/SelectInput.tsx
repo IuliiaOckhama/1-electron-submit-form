@@ -1,9 +1,5 @@
 import React, { useState, useEffect } from 'react'
 
-
-// images
-import { ChevronDown, ChevronUp } from '../styles/svg/Chevron'
-
 function SelectInput({ options, placeholder, handleSelectOption, value }:any) {
   const [values, setValues] = useState<any>([])
   const [focusedValue, setFocusedValue] = useState(-1)
@@ -143,9 +139,6 @@ function SelectInput({ options, placeholder, handleSelectOption, value }:any) {
           onClick={onClick}
         >
           {renderValues()}
-          <span className="select__arrow">
-            {isOpen ? <ChevronUp /> : <ChevronDown />}
-          </span>
         </div>
         {renderOptions()}
       </div>

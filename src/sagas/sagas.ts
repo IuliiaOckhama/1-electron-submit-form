@@ -11,6 +11,7 @@ import {
   DELETE_BUTTON_CLICK, 
   SAVE_BUTTON_CLICK,
   SET_SIDEBAR_TAB, 
+  SET_SORTBY,
   SEND_SAVE_CONFIRMATION, 
   SEND_DELETE_CONFIRMATION,
   FETCH_NOTES, 
@@ -34,14 +35,14 @@ const getIsNoteChanged = (state: State) => state.ui.isNoteChanged
 /******************************* ACTIONS **************************************/
 /******************************************************************************/
 
-import { addNewNote, deleteNote, setNotes, setSelectedNote, setPage, updateNote, normalizeSelectedNoteState, setNewEditorState } from '../actions/dataActions'
+import { addNewNote, deleteNote, setNotes, setSelectedNote, setSortedNotes, setPage, updateNote, normalizeSelectedNoteState, setNewEditorState } from '../actions/dataActions'
 import { setRequestError, setIsNoteChanged } from '../actions/uiActions'
 
 /******************************************************************************/
 /******************************* HELPERS **************************************/
 /******************************************************************************/
 
-import { createNewNoteApi, deleteNoteApi, fetchNotesApi, updateNoteApi } from './api'
+import { createNewNoteApi, deleteNoteApi, fetchNotesApi, fetchSortedNotes, updateNoteApi } from './api'
 import { sendIpcReq } from './ipc'
 import { compareObjects } from '../helpers'
 
@@ -173,6 +174,19 @@ function* handleSaveButtonClick() {
     console.log(err.stack)
   }
 }
+type SortByAction = {
+  type: typeof SET_SORTBY,
+  payload: string
+}
+function* handleSetSortBy({ payload }: SortByAction) {
+  try {
+    const sortedNotes = yield call(fetchSortedNotes, payload)
+    yield put(setSortedNotes(sortedNotes.data))
+  } catch (error) {
+    const err = new Error(error)
+    console.log(err.stack)
+  }
+}
 
 export function* fetchNotesSaga() {
  yield takeLatest(FETCH_NOTES, handleFetchNotesSaga)
@@ -201,4 +215,8 @@ export function* handleSaveButtonClickSaga() {
 /* Saga that controls note deletion */
 export function* handleDeleteButtonClickSaga(){
   yield takeLatest(DELETE_BUTTON_CLICK, handleDeleteButtonClick)
+}
+/* Saga that fetchs sorted notes */
+export function* setSortBySaga() {
+  yield takeLatest(SET_SORTBY, handleSetSortBy)
 }
