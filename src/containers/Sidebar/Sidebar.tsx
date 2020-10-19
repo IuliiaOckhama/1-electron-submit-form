@@ -36,11 +36,9 @@ export default function Sidebar(props: StateProps & DispatchProps) {
  )
 
  const loadMore = () => {
-   console.log('loadMore');
    fetchNotes()
  }
  const handleSelectSearchQueryOption = (sortBy: any) => {
-   console.log('search query is', sortBy);
    setSortBy(sortBy)
  }
 
