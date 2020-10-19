@@ -4,8 +4,8 @@ import {
   DELETE_NOTE, 
   SET_NOTES,
   SET_SORTED_NOTES,
-  SET_SORTBY, 
   SET_PAGE,
+  SET_SORTBY,
   SET_SELECTED_NOTE, 
   SET_NEW_NOTE_STATE, 
   NORMALIZE_SELECTED_NOTE_STATE, 
@@ -19,6 +19,7 @@ import { INITIAL_VALUE } from '../constants'
 const initState: DataStoreStructure = {
  notes: [],
  page: 1,
+ sortBy: null,
  selectedNote: {
   id: null,
   isDirty: false,
@@ -39,6 +40,11 @@ const dataReducer = (state = initState, action: AnyAction) => {
    return {
     ...state,
     notes: state.notes.concat(action.payload),
+   }
+  case SET_SORTBY: 
+   return {
+     ...state,
+     sortBy: action.payload
    }
   case SET_SORTED_NOTES:
     return {

@@ -30,6 +30,7 @@ const getNotes = (state: State) => state.data.notes
 const getSelectedNote = (state: State) => state.data.selectedNote
 const getPage = (state: State) => state.data.page
 const getIsNoteChanged = (state: State) => state.data.selectedNote.isDirty
+const getSortBy = (state: State) => state.data.sortBy
 
 /******************************************************************************/
 /******************************* ACTIONS **************************************/
@@ -52,9 +53,20 @@ import { sendIpcReq } from './ipc'
 function* handleFetchNotesSaga() {
  try {
   const page = yield select(getPage)
-  const notes = yield call(fetchNotesApi, page)
+  const sortBy = yield select(getSortBy)
+  let notes
+  if (sortBy) {
+    notes = yield call(fetchSortedNotes, sortBy, page)
+    if (page === 1) {
+      yield put(setSortedNotes(notes.data))
+    } else {
+      yield put(setNotes(notes.data))
+    }
+  } else {
+    notes = yield call(fetchNotesApi, page)
+    yield put(setNotes(notes.data))
+  }
   yield put(setPage(page + 1))
-  yield put(setNotes(notes.data))
   if (page === 1) {
     yield put(setSelectedNote(notes.data[0]))
   }
@@ -78,10 +90,12 @@ function* handleUpdateNoteSaga({ payload }: UpdateNoteAction ) {
   try {
     const notes = yield select(getNotes)
     const noteToUpdate = notes.find((note: Note) => note.id === payload.id)
-    noteToUpdate.title = payload.title
-    noteToUpdate.content = JSON.stringify(payload.content)
-    noteToUpdate.updated = new Date().toJSON()
-    yield call(updateNoteApi, noteToUpdate)
+    if (payload) {
+      noteToUpdate.title = payload.title
+      noteToUpdate.content = JSON.stringify(payload.content)
+      noteToUpdate.updated = new Date().toJSON()
+      yield call(updateNoteApi, noteToUpdate)
+    }
   } catch (error) {
     const err = new Error(error)
     console.log(err.stack)
@@ -173,8 +187,8 @@ type SortByAction = {
 }
 function* handleSetSortBy({ payload }: SortByAction) {
   try {
-    const sortedNotes = yield call(fetchSortedNotes, payload)
-    yield put(setSortedNotes(sortedNotes.data))
+    yield put(setPage(1))
+    yield handleFetchNotesSaga()
   } catch (error) {
     const err = new Error(error)
     console.log(err.stack)
@@ -198,7 +212,7 @@ export function* setSidebarTabSaga() {
 /* Debounce saga that sets new note state
 */
 export function* debounceHandleEditorChangeSaga() {
-  yield debounce(500, HANDLE_EDITOR_CHANGE, debounceHandleEditorChange)
+  yield debounce(200, HANDLE_EDITOR_CHANGE, debounceHandleEditorChange)
 }
 /* Saga that controls note saving */
 export function* handleSaveButtonClickSaga() {
