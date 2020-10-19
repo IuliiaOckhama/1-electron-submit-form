@@ -1,20 +1,27 @@
-import React, { useState, useEffect } from 'react'
+import * as React from 'react'
+import { SelectInputOptionsValues, SelectInputOptions } from '../entities'
+interface Props {
+  options: typeof SelectInputOptionsValues,
+  placeholder: string,
+  handleSelectOption: (sortOption: SelectInputOptions) => void,
+  value: SelectInputOptions | ''
+}
+const SelectInput = (props: Props) => {
+  const { options, placeholder, handleSelectOption, value } = props
+  const [values, setValues] = React.useState<SelectInputOptions | ''>('')
+  const [focusedValue, setFocusedValue] = React.useState<number>(-1)
+  const [isOpen, setIsOpen] = React.useState<boolean>(false)
 
-function SelectInput({ options, placeholder, handleSelectOption, value }:any) {
-  const [values, setValues] = useState<any>([])
-  const [focusedValue, setFocusedValue] = useState(-1)
-  const [isOpen, setIsOpen] = useState(false)
-
-  useEffect(() => {
+  React.useEffect(() => {
     if (value) {
       setValues(value)
     }
   }, [value])
 
+
   const onBlur = () => {
     const value = values[0]
     let currentFocusedValue = -1
-
     if (value) {
       currentFocusedValue = options.findIndex((option:any) => option.value === value)
     }
@@ -22,68 +29,22 @@ function SelectInput({ options, placeholder, handleSelectOption, value }:any) {
     setIsOpen(false)
   }
 
-  const onKeyDown = e => {
-    let currentFocusedValue = focusedValue
-    switch (e.key) {
-      case ' ':
-        e.preventDefault()
-        if (isOpen) {
-          setIsOpen(true)
-        }
-        break
-      case 'Escape':
-      case 'Tab':
-        if (isOpen) {
-          e.preventDefault()
-          setIsOpen(false)
-        }
-        break
-      case 'Enter':
-        setIsOpen(!isOpen)
-        break
-      case 'ArrowDown':
-        e.preventDefault()
-        currentFocusedValue = focusedValue
-        if (focusedValue < options.length - 1) {
-          currentFocusedValue++
-          setValues([options[currentFocusedValue].value])
-          setFocusedValue(currentFocusedValue)
-        }
-        break
-      case 'ArrowUp':
-        e.preventDefault()
-        currentFocusedValue = focusedValue
-        if (focusedValue > 0) {
-          currentFocusedValue--
-          setValues([options[currentFocusedValue].value])
-          setFocusedValue(currentFocusedValue)
-        }
-        break
-      default:
-        break
-    }
-  }
-
   const onClick = () => {
     setIsOpen(!isOpen)
   }
 
-  const onHoverOption = e => {
+  const onHoverOption = (e:any) => {
     const { value } = e.currentTarget.dataset
     const index = options.findIndex((option:any) => option.value === value)
     setFocusedValue(index)
   }
 
-  const onClickOption = e => {
+  const onClickOption = (e:any) => {
     const { value } = e.currentTarget.dataset
     const index = values.indexOf(value)
     if (index === -1) {
       setValues(value)
       handleSelectOption(value)
-      setIsOpen(false)
-    } else {
-      const newValues = values.splice(index, 1)
-      setValues(newValues)
       setIsOpen(false)
     }
   }
@@ -103,7 +64,7 @@ function SelectInput({ options, placeholder, handleSelectOption, value }:any) {
     return <div className="select__options">{options.map(renderOption)}</div>
   }
 
-  const renderOption = (option, index) => {
+  const renderOption = (option:any, index:number) => {
     const { value } = option
     const selected = values.includes(value)
 
@@ -130,7 +91,6 @@ function SelectInput({ options, placeholder, handleSelectOption, value }:any) {
         className="select"
         tabIndex={0}
         onBlur={onBlur}
-        onKeyDown={onKeyDown}
       >
         <div
           className={

@@ -29,14 +29,14 @@ import { State } from '../reducers'
 const getNotes = (state: State) => state.data.notes
 const getSelectedNote = (state: State) => state.data.selectedNote
 const getPage = (state: State) => state.data.page
-const getIsNoteChanged = (state: State) => state.ui.isNoteChanged
+const getIsNoteChanged = (state: State) => state.data.selectedNote.isDirty
 
 /******************************************************************************/
 /******************************* ACTIONS **************************************/
 /******************************************************************************/
 
-import { addNewNote, deleteNote, setNotes, setSelectedNote, setSortedNotes, setPage, updateNote, normalizeSelectedNoteState, setNewEditorState } from '../actions/dataActions'
-import { setRequestError, setIsNoteChanged } from '../actions/uiActions'
+import { addNewNote, deleteNote, setNotes, setSelectedNote, setSortedNotes, setPage, updateNote, normalizeSelectedNoteState, setNewNoteState } from '../actions/dataActions'
+import { setRequestError } from '../actions/uiActions'
 
 /******************************************************************************/
 /******************************* HELPERS **************************************/
@@ -44,7 +44,6 @@ import { setRequestError, setIsNoteChanged } from '../actions/uiActions'
 
 import { createNewNoteApi, deleteNoteApi, fetchNotesApi, fetchSortedNotes, updateNoteApi } from './api'
 import { sendIpcReq } from './ipc'
-import { compareObjects } from '../helpers'
 
 /******************************************************************************/
 /******************************* SAGAS *************************************/
@@ -116,7 +115,6 @@ function* handleDeleteButtonClick() {
       yield call(deleteNoteApi, selectedNote.id)
       yield put(deleteNote(selectedNote.id))
       yield put(setSelectedNote(notes[0]))
-      yield put(setIsNoteChanged(false))
     }
   } catch (error) {
     const err = new Error(error)
@@ -136,10 +134,9 @@ function* handleSetSidebarTabSaga({ payload }: SetSidebarTabAction) {
       const userConfirmation = yield take(SEND_SAVE_CONFIRMATION)
       const selectedNote = yield select(getSelectedNote)
       if (userConfirmation.payload) {
-        yield put(updateNote(selectedNote.id, selectedNote.editorState.title, selectedNote.editorState.content))
+        yield put(updateNote(selectedNote.id, selectedNote.state.title, selectedNote.state.content))
       }
     }
-    yield put(setIsNoteChanged(false))
     yield put(setSelectedNote(payload))
   } catch (error) {
     const err = new Error(error)
@@ -153,10 +150,7 @@ type HandleEditorChangeAction = {
 }
 function* debounceHandleEditorChange({ payload }: HandleEditorChangeAction) {
   try {
-    const selectedNote = yield select(getSelectedNote)
-    const isChanged = !compareObjects(selectedNote.prevState, payload)
-    yield put(setNewEditorState(payload))
-    yield put(setIsNoteChanged(isChanged))
+    yield put(setNewNoteState(payload))
   } catch (error) {
     const err = new Error(error)
     console.log(err.stack)
@@ -166,9 +160,8 @@ function* debounceHandleEditorChange({ payload }: HandleEditorChangeAction) {
 function* handleSaveButtonClick() {
   try {
     const selectedNote = yield select(getSelectedNote)
-    yield put(updateNote(selectedNote.id, selectedNote.editorState.title, selectedNote.editorState.content))
+    yield put(updateNote(selectedNote.id, selectedNote.state.title, selectedNote.state.content))
     yield put(normalizeSelectedNoteState())
-    yield put(setIsNoteChanged(false))
   } catch (error) {
     const err = new Error(error)
     console.log(err.stack)
@@ -202,8 +195,7 @@ export function* createNewNoteSaga(){
 export function* setSidebarTabSaga() {
   yield takeLatest(SET_SIDEBAR_TAB, handleSetSidebarTabSaga)
 }
-/* Debounce saga that compares in real time prev state of the note with new state; 
-   if they differ, fires 'setIsNoteChanged' action 
+/* Debounce saga that sets new note state
 */
 export function* debounceHandleEditorChangeSaga() {
   yield debounce(500, HANDLE_EDITOR_CHANGE, debounceHandleEditorChange)

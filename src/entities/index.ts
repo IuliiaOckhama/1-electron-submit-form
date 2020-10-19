@@ -13,8 +13,7 @@ export type NoteState = {
 export type SelectedNote = {
   id: number | null,
   isDirty: false,
-  prevState: NoteState,
-  editorState: NoteState
+  state: NoteState
 }
 export type Note = {
  id: number,
@@ -23,3 +22,5 @@ export type Note = {
  created: string,
  updated: string,
 }
+export const SelectInputOptionsValues = [{ value: 'Title' }, { value: 'Updated' }, { value: 'Created' }] as const;
+export type SelectInputOptions = typeof SelectInputOptionsValues[number]['value']

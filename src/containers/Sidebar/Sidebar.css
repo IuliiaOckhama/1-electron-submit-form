@@ -129,7 +129,7 @@
 }
 .sidebar__notes-container {
   overflow-y: scroll;
-  height: 26rem;
+  height: 32rem;
   width: 98%;
 }
 .sidebar__sortBy-container {

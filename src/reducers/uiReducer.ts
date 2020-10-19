@@ -1,10 +1,9 @@
 import { AnyAction } from 'redux'
-import { SET_REQUEST_ERROR, SET_IS_NOTE_CHANGED } from '../actions/types'
+import { SET_REQUEST_ERROR } from '../actions/types'
 import { UiStoreStructure } from '../entities/storeTypes'
 
 const initState: UiStoreStructure = {
- reqError: null,
- isNoteChanged: false
+ reqError: null
 }
 
 const uiReducer = (state = initState, action: AnyAction) => {
@@ -14,11 +13,7 @@ const uiReducer = (state = initState, action: AnyAction) => {
     ...state,
     reqError: action.payload,
    }
-  case SET_IS_NOTE_CHANGED:
-    return {
-      ...state,
-      isNoteChanged: action.payload
-    }
+
   default:
    return state
  }

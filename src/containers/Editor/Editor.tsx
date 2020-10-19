@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { Editable, withReact, Slate } from 'slate-react'
-import { createEditor } from 'slate'
+import { createEditor, Node } from 'slate'
 import { withHistory } from 'slate-history'
 
 import { MarkButton, BlockButton } from '../../components/EditorButtons'
@@ -11,6 +11,7 @@ import { INITIAL_VALUE } from '../../constants'
 import { NoteState } from '../../entities'
 import { DataStoreStructure, UiStoreStructure } from '../../entities/storeTypes'
 import './Editor.css'
+import { compareObjects } from '../../helpers'
 
 interface StateProps {
  data: DataStoreStructure;
@@ -18,50 +19,52 @@ interface StateProps {
 }
 interface DispatchProps {
   createNewNote: () => void,
-  handleEditorChange: (noteState: NoteState) => void
+  handleEditorChange: (noteState: any) => void
   saveButtonClick: () => void
 }
 const EditorComponent = (props: StateProps & DispatchProps) => {
  const {
   data: { selectedNote },
-  ui: { isNoteChanged },
   createNewNote,
   handleEditorChange,
   saveButtonClick
  } = props
 
- // isDirty
- // if isDirty - change button type ISChanged remove
- // if isDirty = true - call ipc
- // in store - могу ли я не хранить изначальный стейт заметки?
-
-
  React.useEffect(() => {
-  if (selectedNote.id) {
+  if (selectedNote.id && !selectedNote.isDirty) {
     setEditorValue({
-      content: selectedNote.prevState.content,
-      title: selectedNote.prevState.title
+      content: selectedNote.state.content,
+      title: selectedNote.state.title
     })
+    setReferenceValue({
+      content: selectedNote.state.content,
+      title: selectedNote.state.title
+    })
+    setIsNoteChanged(false)
   }
- }, [selectedNote.id, selectedNote.prevState])
+ // eslint-disable-next-line react-hooks/exhaustive-deps
+ }, [selectedNote.id, selectedNote.isDirty])
 
  const [editorValue, setEditorValue] = React.useState<NoteState>({ content: INITIAL_VALUE, title: '' })
+ const [referenceValue, setReferenceValue] = React.useState<NoteState>({ content: INITIAL_VALUE, title: '' })
+ const [isNoteChanged, setIsNoteChanged] = React.useState<boolean>(false)
  const renderElement = React.useCallback((props) => <Element {...props} />, [])
  const renderLeaf = React.useCallback((props) => <Leaf {...props} />, [])
  const editor = React.useMemo(() => withHistory(withReact(createEditor())), [])
 
- const updateUserValue = (name:string, newValue:Node[]|string) => {
+
+ const updateUserValue = (name:string, newValue: Node[] | string) => {
     const newValueState = { ...editorValue, [name]: newValue }
     setEditorValue(newValueState)
-    if (newValueState !== editorValue) {
-      console.log(newValueState, newValue);
-      // debounced action
-      handleEditorChange(newValueState)
+    const isChanged = !compareObjects(newValueState, referenceValue)
+    if (isChanged) {
+      setIsNoteChanged(true)
+      // debounced action setNewNoteState
+      handleEditorChange({isDirty: true, state: newValueState})
+    } else {
+      setIsNoteChanged(false)
     }
   }
-
-  console.log(selectedNote.prevState);
-
   const handleEditorFocus = React.useCallback(() => {
     if (!selectedNote) {
       createNewNote()
