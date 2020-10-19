@@ -128,7 +128,7 @@ function* handleDeleteButtonClick() {
       const notes = yield select(getNotes)
       yield call(deleteNoteApi, selectedNote.id)
       yield put(deleteNote(selectedNote.id))
-      yield put(setSelectedNote(notes[0]))
+      yield put(setSelectedNote(notes.findIndex((note:Note) => note.id === selectedNote.id) === 0 ? notes[1] : notes[0]))
     }
   } catch (error) {
     const err = new Error(error)
