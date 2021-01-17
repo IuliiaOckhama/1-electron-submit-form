@@ -11,8 +11,8 @@ export class MainWindow {
 
   createWindow(): BrowserWindow {
     const mainWindow = new BrowserWindow({
-      width: 800,
-      height: 600,
+      width: 1600,
+      height: 1000,
       show: false,
       webPreferences: {
        nodeIntegration: true
@@ -28,5 +28,11 @@ export class MainWindow {
     mainWindow.once('ready-to-show', () => mainWindow.show())
     
     return mainWindow;
+  }
+
+  public send(channel: string, args: any) {
+    if (this.mainWindow) {
+      this.mainWindow.webContents.send(channel, args);
+    } 
   }
 }

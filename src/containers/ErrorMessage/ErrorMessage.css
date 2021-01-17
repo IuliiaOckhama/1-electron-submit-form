@@ -1,0 +1,13 @@
+.error-message-container {
+  position: absolute;
+  top: 2%;
+  left: 50%;
+  transform: translateX(-50%);
+  color: red;
+}
+.error-message-container_active {
+  visibility: unset;
+}
+.error-message-container_disabled {
+  visibility: hidden;
+}
